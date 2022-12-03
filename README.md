@@ -15,6 +15,7 @@ The key points / features:
 3) a container to run [pgAdmin](https://www.pgadmin.org/) inside Docker (could be checked at http://localhost:5454/browser/ when the docker-compose is up and running)
 - [Swagger](https://swagger.io/) is set up (could be checked at http://localhost:4000/api/docs when the docker-compose is up and running)
 - [Sequelize](https://sequelize.org/) is set up
+- [AutoMapper](https://automapperts.netlify.app/docs/nestjs) is set up
 - versioning is set up
 - a basic logger is set up
 - a service for graceful shutdown is prepared

@@ -2,16 +2,16 @@ services:
   postgres:
     image: postgres:14-alpine
     container_name: test-db
-    environment:
-      - POSTGRES_USER=test
-      - POSTGRES_PASSWORD=test
-      - POSTGRES_DB=test
+    env_file:
+      - ./environment/.env.local
     volumes:
       - ./init-database.sh:/docker-entrypoint-initdb.d/init-database.sh
       - ./local/postgres:/var/lib/postgresql/data
     ports:
       - "5433:5432"
-    restart: unless-stopped
+    networks:
+      - nesjs-network
+    restart: always
 
   backend:
     image: node:14.17.6
@@ -29,6 +29,10 @@ services:
     volumes:
       - ./data/init.sql:/docker-entrypoint-initdb.d/init.sql
       - .:/app
+    networks:
+      - nesjs-network
+    env_file:
+      - ./environment/.env.local
     restart: unless-stopped
 
   pgadmin:
@@ -41,6 +45,13 @@ services:
       - PGADMIN_LISTEN_PORT=5454
     links:
       - postgres
+    networks:
+      - nesjs-network
+    env_file:
+      - ./environment/.env.local
 
 volumes:
   postgres_data:
+
+networks:
+  nesjs-network:

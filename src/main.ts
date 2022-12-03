@@ -1,30 +1,34 @@
 import { ValidationPipe } from "@nestjs/common";
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
+import { GeneralExceptionFilter } from "./common/filters";
 
 import {
-  setupSwagger,
-  setupGrasefulShutdown,
-  setupModuleHotReload,
-  setupVersioning
-} from "./_setup";
+	setupSwagger,
+	setupModuleHotReload,
+	setupVersioning,
+	setupCors,
+} from "./middlewares";
 
 declare const module: any;
 
 const PORT = 4000;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule, {
-        logger: ['error', 'warn'],
-    });
+	const app = await NestFactory.create(AppModule, {
+		logger: ['error', 'warn'],
+	});
+	const { httpAdapter } = app.get(HttpAdapterHost);
+	app.useGlobalFilters(new GeneralExceptionFilter(httpAdapter));
 
-    app.useGlobalPipes(new ValidationPipe());
+	app.useGlobalPipes(new ValidationPipe());
 
-    setupSwagger(app);
-    setupVersioning(app);
-    setupModuleHotReload(module, app);
-    setupGrasefulShutdown(app);
+	setupCors(app);
 
-    await app.listen(PORT);
+	setupVersioning(app);
+	setupSwagger(app);
+
+	setupModuleHotReload(module, app);
+
+	await app.listen(PORT);
 }
-bootstrap();

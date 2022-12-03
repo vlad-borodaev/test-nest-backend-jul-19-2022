@@ -1,6 +1,9 @@
-import {Table, Column, Model, DataType} from "sequelize-typescript";
+import { Table, Column, Model, DataType } from "sequelize-typescript";
 
-@Table
+@Table({
+	timestamps: true,
+	paranoid: true,
+})
 export class User extends Model {
 	@Column({
 		type: DataType.STRING(32),
@@ -12,18 +15,18 @@ export class User extends Model {
 		type: DataType.STRING(32),
 		allowNull: false,
 	})
-    last_name: string;
+	last_name: string;
 
 	@Column({
 		type: DataType.STRING(256),
 		allowNull: false,
 		unique: true,
 	})
-    email: string;
+	email: string;
 
 	@Column({
 		type: DataType.BOOLEAN,
 		allowNull: false,
 	})
-    is_active: boolean;
+	is_active: boolean;
 }
